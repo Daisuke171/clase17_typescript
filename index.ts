@@ -16,11 +16,11 @@ interface Product {
     stock: number;
     readonly initialStock?: number;
 };
-interface functionProduct {
+interface FunctionProduct {
     (price:number, stock:number): number;
 }
 
-const totalAmount: functionProduct = (price=0, stock=0) => {
+const totalAmount: FunctionProduct = (price=0, stock=0) => {
     return price * stock;
 };
 const firstItem: Product = {
@@ -42,41 +42,41 @@ const thirdItem: Product = {
     initialStock: 2
 };
 let result: number = totalAmount(firstItem.price, firstItem.stock);
-/**
+
 console.log(`El total de ${firstItem.name} es: $${result}`);
-*/
+
 
 ///2.
 interface Cart {
     products: number[];
 }
 interface CartFunction {
-    (cart: Cart, product?: Product): number;
+    (cart: Cart, product?: Product): boolean | number;
 }
 
 const addToCart: CartFunction = (cart, product) => {
-    if (!product || product.stock <= 0) return 0;
+    if (!product || product.stock <= 0) return false;
     
     if (product.stock <= 0) {
         console.log(`No hay stock de ${product.name}`);
-        return 0;
+        return false;
     }
     
     cart.products.push(product.price);
     product.stock--;
-    return 1;
+    return true;
 };
 const removeFromCart: CartFunction = (cart, product) => {
-    if (!product || product.stock < 0) return 0;
+    if (!product || product.stock < 0) return false;
 
     const index = cart.products.indexOf(product.price);
     if (index > -1 && product.stock >= 0 && (product.stock < product.initialStock!)) {
         cart.products.splice(index, 1);
         product.stock++;
-        return 1;
+        return true;
     }
     
-    return 0;
+    return false;
 };
 const calculateTotal: CartFunction = (cart) => {
     let total = 0;
@@ -90,7 +90,7 @@ const cart1: Cart = {
     products: [],
 };
 
-/** 
+
 addToCart(cart1, firstItem);
 addToCart(cart1, firstItem);
 addToCart(cart1, firstItem);
@@ -110,38 +110,36 @@ removeFromCart(cart1, secondItem); // 3 stock
 removeFromCart(cart1, secondItem); // 3 stock
 console.log("Total inicial:", calculateTotal(cart1));
 console.log("Stock item 2:", secondItem.stock, "Stock inicial:", secondItem.initialStock);
-*/ //PRUEBAS
+
 
 //3.
 type Band = {
     nameBand: string;
     genreBand: string;
 }
-type singer = Band & {
+type Singer = Band & {
     nameSinger: string;
     typeOfVoice: string;
 }
 
-function showSinger(singer: singer): string {
+function showSinger(singer: Singer): string {
     return `El cantante ${singer.nameSinger} de la banda ${singer.nameBand} es de genero ${singer.genreBand} y su tipo de voz es ${singer.typeOfVoice}`;
 }
 
 
-const singer1: singer = {
+const singer1: Singer = {
     nameBand: "STANCE PUNKS",
     genreBand: "Punk Rock Japonés",
     nameSinger: "Tsuru",
     typeOfVoice: "Barítono"
 }
 
-const singer2: singer = {
+const singer2: Singer = {
     nameBand: "The Beatles",
     genreBand: "BritRock",
     nameSinger: "Paul McCartney",
     typeOfVoice: "Tenor"
 }
 
-/**
 console.log(showSinger(singer1));
 console.log(showSinger(singer2));
-*/

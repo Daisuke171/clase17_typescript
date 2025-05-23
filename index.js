@@ -35,25 +35,25 @@ let result = totalAmount(firstItem.price, firstItem.stock);
 console.log(`El total de ${firstItem.name} es: $${result}`);
 const addToCart = (cart, product) => {
     if (!product || product.stock <= 0)
-        return 0;
+        return false;
     if (product.stock <= 0) {
         console.log(`No hay stock de ${product.name}`);
-        return 0;
+        return false;
     }
     cart.products.push(product.price);
     product.stock--;
-    return 1;
+    return true;
 };
 const removeFromCart = (cart, product) => {
     if (!product || product.stock < 0)
-        return 0;
+        return false;
     const index = cart.products.indexOf(product.price);
     if (index > -1 && product.stock >= 0 && (product.stock < product.initialStock)) {
         cart.products.splice(index, 1);
         product.stock++;
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 };
 const calculateTotal = (cart) => {
     let total = 0;
@@ -65,6 +65,24 @@ const calculateTotal = (cart) => {
 const cart1 = {
     products: [],
 };
+addToCart(cart1, firstItem);
+addToCart(cart1, firstItem);
+addToCart(cart1, firstItem);
+addToCart(cart1, firstItem);
+addToCart(cart1, firstItem);
+addToCart(cart1, firstItem); // No hay stock de Laptop Lenovo
+console.log("Total inicial:", calculateTotal(cart1));
+console.log("Stock item 1:", firstItem.stock, "Stock inicial:", firstItem.initialStock);
+removeFromCart(cart1, firstItem);
+console.log("Total inicial:", calculateTotal(cart1));
+console.log("Stock item 1:", firstItem.stock, "Stock inicial:", firstItem.initialStock);
+addToCart(cart1, secondItem);
+console.log("Total inicial:", calculateTotal(cart1));
+console.log("Stock item 2:", secondItem.stock, "Stock inicial:", secondItem.initialStock);
+removeFromCart(cart1, secondItem); // 3 stock
+removeFromCart(cart1, secondItem); // 3 stock
+console.log("Total inicial:", calculateTotal(cart1));
+console.log("Stock item 2:", secondItem.stock, "Stock inicial:", secondItem.initialStock);
 function showSinger(singer) {
     return `El cantante ${singer.nameSinger} de la banda ${singer.nameBand} es de genero ${singer.genreBand} y su tipo de voz es ${singer.typeOfVoice}`;
 }
